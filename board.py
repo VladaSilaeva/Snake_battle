@@ -256,7 +256,7 @@ class Board:
             return 'turn'
         return self.board[i][j][:-1]
 
-    def get_image_rotate(self, i, j, snake_ind, body_ind):
+    def get_image_rotate(self, snake_ind, body_ind):
         directions = {'up': 0, 'right': 1, 'down': 2, 'left': 3}
         dirs = self.snakes_dir[snake_ind][body_ind]
         rotate = directions[dirs[0]]
@@ -264,16 +264,6 @@ class Board:
             if directions[dirs[1]] - directions[dirs[0]] != 1 and directions[dirs[1]] - directions[dirs[0]] != -3:
                 rotate += 4
         return rotate
-
-    def rotate(self, name, dirs):
-        directions = {'up': 0, 'right': 1, 'down': 2, 'left': 3}
-        angle = -90 * directions[dirs[0]]
-        new_image = load_image(name)
-        if len(dirs) == 2:
-            if directions[dirs[0]] - directions[dirs[1]] != 1:
-                new_image = pygame.transform.flip(new_image, False, False)
-        new_image = pygame.transform.rotate(new_image, angle)
-        return new_image
 
     def render(self, theme=0):
         for i in range(Board.K, self.width + Board.K):
@@ -291,8 +281,10 @@ class Board:
                     else:
                         snake_ind = int(self.board[i][j][-1])
                         body_ind = self.snakes[snake_ind].index((i, j))
-                        self.screen.blit(pygame.transform.scale(self.snakes_skins[snake_ind][self.get_image_name(i,j, snake_ind)
-                                         ][self.get_image_rotate(i,j, snake_ind, body_ind)], (self.cell_size, self.cell_size)), pos)
+                        self.screen.blit(pygame.transform.scale(self.snakes_skins[snake_ind][
+                                                                    self.get_image_name(i, j, snake_ind)
+                                                                ][self.get_image_rotate(snake_ind, body_ind)],
+                                                                (self.cell_size, self.cell_size)), pos)
                 pygame.draw.rect(self.screen, Board.COLOR_BORDER, pos, 1)
 
 
@@ -346,7 +338,7 @@ class MiniBoard:
             return 'turn'
         return self.board[i][j]
 
-    def get_image_rotate(self, i, j, body_ind):
+    def get_image_rotate(self, body_ind):
         directions = {'up': 0, 'right': 1, 'down': 2, 'left': 3}
         dirs = self.snake_dir[body_ind]
         rotate = directions[dirs[0]]
@@ -371,6 +363,6 @@ class MiniBoard:
                         print(self.snake, (i, j))
                         body_ind = self.snake.index((i, j))
                         screen.blit(pygame.transform.scale(self.snake_skins[self.get_image_name(i, j)
-                                                                ][self.get_image_rotate(i, j, body_ind)],
-                                                                (self.cell_size, self.cell_size)), pos)
+                                                           ][self.get_image_rotate(body_ind)],
+                                                           (self.cell_size, self.cell_size)), pos)
                 pygame.draw.rect(screen, MiniBoard.COLOR_BORDER, pos, 1)

@@ -1,13 +1,13 @@
-from chips import Chip
+import pygame
+import sys
 from board import Board, MiniBoard
+from chips import Chip
 from snake_menu import Snake
-import pygame, sys
-
 
 left = top = 0
 cell_size = 25
 n_cell = 25
-size = W, H = n_cell * cell_size , n_cell * cell_size
+size = W, H = n_cell * cell_size, n_cell * cell_size
 pygame.init()
 screen = pygame.display.set_mode(size)
 main_color = pygame.Color('lightskyblue3')
@@ -28,9 +28,13 @@ class Button:
     def draw(self, screen):
         self.txt_surface = self.font.render(self.text, True, self.color)
         if self.font == FONT:
-            screen.blit(self.txt_surface, (self.rect.x + self.rect.width // 2 - len(self.text) * (self.rect.width // 20), self.rect.y + self.rect.height // 4))
+            screen.blit(self.txt_surface, (
+                self.rect.x + self.rect.width // 2 - len(self.text) * (self.rect.width // 20),
+                self.rect.y + self.rect.height // 4))
         else:
-            screen.blit(self.txt_surface, (self.rect.x + self.rect.width // 2 - len(self.text) * (self.rect.width // 15), self.rect.y + self.rect.height // 4))
+            screen.blit(self.txt_surface, (
+                self.rect.x + self.rect.width // 2 - len(self.text) * (self.rect.width // 15),
+                self.rect.y + self.rect.height // 4))
         pygame.draw.rect(screen, self.color, self.rect, 2)
 
     def handle_event(self, event):
@@ -47,7 +51,7 @@ class SnakeInfo:
         w_btn, h_btn = w // 2 - d, 50
         self.btn_change = Button(x, y + h - h_btn, w_btn, h_btn, 'change', FONT_2)
         self.btn_change.func = lambda: change_snake(self)
-        self.btn_edit = Button(x + w - w_btn, y + h - h_btn , w_btn, h_btn, 'create', FONT_2)
+        self.btn_edit = Button(x + w - w_btn, y + h - h_btn, w_btn, h_btn, 'create', FONT_2)
         self.btn_edit.func = lambda: create_snake(self)
         self.snake_ind = snake_ind
         self.color = main_color
@@ -63,7 +67,8 @@ class SnakeInfo:
 
     def draw(self, screen):
         self.txt_surface = [FONT_2.render(text, True, self.color) for text in self.text]
-        screen.blit(self.txt_surface[0], (self.rect.x + self.rect.width // 2 - len(self.text) * (self.rect.width // 20), self.rect.y + self.rect.height // 4))
+        screen.blit(self.txt_surface[0], (self.rect.x + self.rect.width // 2 - len(self.text) * (self.rect.width // 20),
+                                          self.rect.y + self.rect.height // 4))
         pygame.draw.rect(screen, self.color, self.rect, 4)
         self.btn_edit.draw(screen)
         self.btn_change.draw(screen)
@@ -170,24 +175,20 @@ def start():
     snakes.append(Snake('snake2(rand)', [Chip()]))
     snakes.append(Snake('snake3(1 chip)', [ch[4]]))
 
-    snakes_cur = [0 for i in range(4)]
+    snakes_cur = [0 for _ in range(4)]
     snakes_cur[0] = 1
     snakes_cur[1] = 2
     snakes_cur[2] = 3
-    snakes[1].skin = ['head_1.png', 'body_1.png', 'turn_1.png','tail_1.png']
-    snakes[2].skin = ['head_2.png', 'body_2.png', 'turn_2.png','tail_2.png']
-
+    snakes[1].skin = ['head_1.png', 'body_1.png', 'turn_1.png', 'tail_1.png']
+    snakes[2].skin = ['head_2.png', 'body_2.png', 'turn_2.png', 'tail_2.png']
 
     text = '''ЗМЕЙКИ'''
     print(text)
-    # start_game(snakes_cur)
-
     clock = pygame.time.Clock()
     buttons = []
     n = 3
     width = 200
     height = 50
-    #top = (size[0] - n * height) // 2
     top = 15
     for i in range(n):
         buttons.append(Button((400 + size[1] - width) // 2, top + i * height * 2, width, height))
@@ -266,7 +267,8 @@ def start_game(snakes_ind):
         if score[i] is None:
             score_text.append('')
         else:
-            score_text.append(str(snakes[snakes_ind[i]]) + ' + ' * (score[i] >= 0) + ' - ' * (score[i] < 0) + str(abs(score[i])))
+            score_text.append(str(snakes[snakes_ind[i]]) + ' + ' *
+                              (score[i] >= 0) + ' - ' * (score[i] < 0) + str(abs(score[i])))
             snakes[snakes_ind[i]].rang += score[i]
 
     screen.fill(color_background)
